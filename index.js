@@ -7,12 +7,13 @@ dotenv.config()
 const connect = async() => {
     try {
         await mongoose.connect(process.env.MONGO);
-        console.log("Connect to mongoDB")
+        console.log("Connect to mongoDB ")
     } catch (error) {
         throw error;
     }
 };
 
+connect()
 app.listen(8800, () => {
     console.log("Connect to backend.")
 })
