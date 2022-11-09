@@ -1,50 +1,32 @@
 import express, { application } from "express";
+import { createHotel, deleteHotel, updatedHotel } from "../controllers/hotel.js";
 import Hotels from "../modules/Hotels.js";
+import { createError } from "../untils/error.js";
 const router = express.Router();
 //Create:
-router.post("/", async(req, res) => {
-    const newHotel = new Hotels(req.body)
-    try {
-        const savedHotel = await newHotel.save()
-        res.status(200).json(savedHotel)
-    } catch (error) {
-        res.status(500).json(err)
-    }
-});
+router.post("/", createHotel);
 //Update:
-router.put("/:id", async(req, res) => {
-    try {
-        const updatedHotel = await Hotels.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
-        res.status(200).json(updatedHotel)
-    } catch (error) {
-        res.status(500).json(err)
-    }
-});
+router.put("/:id", updatedHotel);
 
 //delete
-router.delete("/:id", async(req, res) => {
-    try {
-        const updatedHotel = await Hotels.findByIdAndDelete(req.params.id);
-        res.status(200).json("Hotel has been delete.");
-    } catch (error) {
-        res.status(500).json(err)
-    }
-});
+router.delete("/:id", deleteHotel);
 //Get
 router.get("/:id", async(req, res) => {
     try {
         const hotel = await Hotels.findById(req.params.id)
         res.status(200).json(hotel)
-    } catch (error) {
+    } catch (err) {
         res.status(500).json(err)
     }
 });
 //Get all
-router.get("/", async(req, res) => {
+router.get("/", async(req, res, next) => {
+    // const failed = true;
+    // if (failed) return next(createError(401), "You aren't authen")
     try {
         const hotels = await Hotels.find(req.params.id)
         res.status(200).json(hotels)
-    } catch (error) {
+    } catch (err) {
         res.status(500).json(err)
     }
 });
